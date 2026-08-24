@@ -14,6 +14,15 @@ Release/
 .metadata/
 RemoteSystemsTempFiles/
 
+# Vendor-generated HAL/CMSIS driver library and unused USB middleware —
+# these regenerate automatically from the .ioc file via CubeMX, no need to commit them
+Drivers/
+Middlewares/
+USB_HOST/
+
+# Stray zip-extraction artifact, not part of the project
+__MACOSX/
+
 # OS files
 .DS_Store
 Thumbs.db
