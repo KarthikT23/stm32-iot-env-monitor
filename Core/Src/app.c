@@ -13,11 +13,11 @@
 
 extern ADC_HandleTypeDef hadc1;
 
-#define WIFI_SSID "KarthikT"
-#define WIFI_PASS "deathnote"
+#define WIFI_SSID "SSID" // Edit with your own SSID
+#define WIFI_PASS "PASSWORD" // Edit with your own Password
 
 static char esp_ip[32];
-#define THINGSPEAK_API_KEY "LXSUW3A87OX1RND3"
+#define THINGSPEAK_API_KEY "API_KEY" // Edit with your API key from ThingSpeak
 static uint32_t publish_counter = 0;
 int brightness = 40;
 extern UART_HandleTypeDef huart2;
