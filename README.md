@@ -58,7 +58,7 @@ The STM32's own USB (ST-LINK) and the ESP32's USB are each powered independently
 
 # Setup
 
-1. Open iot_stm32_project1.ioc in STM32CubeIDE and click Generate Code once — this pulls in the STM32 HAL/CMSIS driver library (not included in this repo, since it's vendor boilerplate) without touching any of the custom code in Core/Src, since CubeMX only regenerates the sections outside the USER CODE markers.
+1. Open iot_stm32_project1.ioc in STM32CubeIDE and click Generate Code once. This pulls in the STM32 HAL/CMSIS driver library (not included in this repo, since it's vendor boilerplate) without touching any of the custom code in Core/Src, since CubeMX only regenerates the sections outside the USER CODE markers.
 2. Wire everything per the pin table above.
 3. Flash the ESP32 with Espressif's ESP-AT firmware (v4.1.1.0, straight from `dl.espressif.com`, via `esptool.py`).
 4. In `Core/Src/app.c`, fill in your own WiFi SSID/password and your ThingSpeak Write API Key.
