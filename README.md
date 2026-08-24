@@ -26,7 +26,7 @@ h) ThingSpeak account
 
 - Every 5 seconds, the STM32 reads temperature and pressure from the BMP180, reads its own internal die temperature via the ADC, and updates the OLED with all of it plus the current WiFi/IP status.
 - Every 15 seconds (ThingSpeak's free-tier minimum interval), it pushes temperature, pressure, and MCU temperature to a ThingSpeak channel over WiFi via the ESP32, using plain AT commands.
-- A hardware Timer interrupt (TIM3) blinks an onboard LED once a second, completely independent of the main loop — proof the interrupt is genuinely asynchronous, not just a delay in disguise.
+- A hardware Timer interrupt (TIM3) blinks an onboard LED once a second, completely independent of the main loop, proof the interrupt is genuinely asynchronous, not just a delay in disguise.
 - Pressing the onboard user button fires an EXTI interrupt that forces an immediate cloud publish, instead of waiting for the next 15-second cycle.
 - The WS2812 panel reflects live system state: blue while booting, green after a successful publish, red if WiFi drops or a publish fails.
 
@@ -54,7 +54,7 @@ Connect the SCL and SDA pins of both the OLED and the BMP180 to PB6 and PB9 resp
 | Status LED (LD4) | PD12 |
 | Internal temp sensor | ADC1 (internal channel, no pin) |
 
-The STM32's own USB (ST-LINK) and the ESP32's USB are each powered independently from the PC — no shared power wiring between them.
+The STM32's own USB (ST-LINK) and the ESP32's USB are each powered independently from the PC, no shared power wiring between them.
 
 # Setup
 
@@ -69,15 +69,15 @@ The STM32's own USB (ST-LINK) and the ESP32's USB are each powered independently
 
 ThingSpeak channel: https://thingspeak.mathworks.com/channels/3466268
 
-Live sensor data plotted against time on ThingSpeak — temperature, pressure, and MCU die temperature:
+Live sensor data plotted against time on ThingSpeak ie temperature, pressure, and MCU die temperature:
 
 [![ThingSpeak graphs](docs/thingspeak-demo.jpg)](docs/thingspeak-demo.jpg)
 
-Serial console on boot — I2C bus scan, WiFi connect, first few ThingSpeak publishes:
+Serial console on boot, I2C bus scan, WiFi connect, first few ThingSpeak publishes:
 
 [![Serial log on boot](docs/serial-log-boot.jpg)](docs/serial-log-boot.jpg)
 
-Serial console showing the manual publish button in action — notice the extra "Manual publish triggered by button!" entries outside the normal 15-second cadence:
+Serial console showing the manual publish button in action, notice the extra "Manual publish triggered by button!" entries outside the normal 15-second cadence:
 
 [![Serial log, manual publish](docs/serial-log-button.jpg)](docs/serial-log-button.jpg)
 
@@ -87,7 +87,7 @@ Serial console showing the manual publish button in action — notice the extra 
 
 ## WS2812 status panel
 
-The panel reflects live system state — no two of these photos are staged, they're the actual states firing during normal operation:
+The panel reflects live system state, no two of these photos are staged, they're the actual states firing during normal operation:
 
 | Booting (blue) | Publish succeeded (green) | Publish failed / WiFi disconnected (red) |
 |---|---|---|
@@ -97,9 +97,9 @@ The panel reflects live system state — no two of these photos are staged, they
 
 [![OLED display](docs/oled-live-readout.jpg)](docs/oled-live-readout.jpg)
 
-# Known Limitations
+# Known Limitations of my board
 
-The STM32F407's internal temperature sensor has no factory-calibrated offset (unlike some newer STM32 families), so the absolute reading can be off by tens of degrees chip-to-chip — this is a documented characteristic of the sensor confirmed on ST's own community forum, not a bug in this code. It's still fine for trend/relative monitoring, and the safe junction temperature limit (105C) is nowhere close regardless.
+My STM32F407 discovery board's internal temperature sensor has no factory-calibrated offset (unlike some newer STM32 families), so the absolute reading can be off by tens of degrees chip-to-chip — this is a documented characteristic of the sensor confirmed on ST's own community forum, not a bug in this code. It's still fine for trend/relative monitoring, and the safe junction temperature limit (105C) is nowhere close regardless.
 
 ThingSpeak's free tier enforces a 15-second minimum update interval, which sets the cloud publish cadence here.
 
@@ -107,8 +107,8 @@ ThingSpeak's free tier enforces a 15-second minimum update interval, which sets 
 
 This project builds on a few open-source drivers rather than writing everything from scratch:
 
-- SSD1306 OLED driver — originally by Tilen Majerle, ported to STM32 HAL by Alexander Lutsai (GPLv3)
-- BMP180 driver, WS2812 SPI driver, and ESP8266/ESP32 AT-command UART driver — ControllersTech
+- SSD1306 OLED driver which was originally built by Tilen Majerle, ported to STM32 HAL by Alexander Lutsai (GPLv3)
+- BMP180 driver, WS2812 SPI driver, and ESP8266/ESP32 AT-command UART driver referred from ControllersTech
 
 # References
 
@@ -125,3 +125,5 @@ This project builds on a few open-source drivers rather than writing everything 
 [6] Espressif ESP-AT firmware: https://docs.espressif.com/projects/esp-at/en/latest/esp32/
 
 [7] STM32F407 internal temp sensor discussion, ST Community: https://community.st.com/stm32-mcus-products-25/stm32f407vgt-temperature-85998
+
+[8] STM32 UART transmit/receive fundamentals (FTDI-based console): https://controllerstech.com/stm32-uart-1-configure-uart-transmit-data/
