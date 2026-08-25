@@ -23,6 +23,8 @@ int brightness = 40;
 extern UART_HandleTypeDef huart2;
 static char ts_status_line[16] = "TS:--";
 static uint32_t counter = 0;
+static volatile uint32_t heartbeat_count = 0;
+static uint32_t last_loop_tick = 0;
 extern I2C_HandleTypeDef hi2c1;
 static volatile uint8_t manual_publish_requested = 0;
 
@@ -45,6 +47,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     if (htim->Instance == TIM3)
     {
         HAL_GPIO_TogglePin(GPIOD, LD3_Pin);
+        heartbeat_count++;
     }
 }
 
@@ -83,7 +86,13 @@ void App_Run(void)
 
     printf("STM32 IoT Environment Monitor alive, tick %lu | Temp: %.1f C | Press: %.1f hPa\r\n",
            (unsigned long)counter++, temp, press / 100.0f);
-
+    uint32_t now = HAL_GetTick();
+    uint32_t elapsed_ms = now - last_loop_tick;
+    last_loop_tick = now;
+    float measured_hz = (elapsed_ms > 0) ? (heartbeat_count * 1000.0f / elapsed_ms) : 0.0f;
+    printf("Heartbeat: %lu toggles in %lu ms (%.2f Hz)\r\n",
+               heartbeat_count, elapsed_ms, measured_hz);
+    heartbeat_count = 0;
 
     char buf[20];
     sprintf(buf, "T:%.1fC P:%.0fhPa", temp, press / 100.0f);
